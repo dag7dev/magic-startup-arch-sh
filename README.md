@@ -15,6 +15,15 @@ It works in three modes:
 - aur: it will install some programs using yay as aur manager. If it is not present it will be installed using pacman.
 - alias: it will append to your .bashrc useful aliases which let you perform some easy operations using CLI.
 
+You can customize each list by adding or removing entries in the script in the variables pacapps and aurapps.
+
+The packages (for the unmodified script, the vanilla edition) are:
+|Pacman apps|Aur apps|
+|-----------|--------|
+|vlc    |sublime     |
+|firefox|zoom        |
+|gimp   |intellij-idea-ultimate-edition |
+
 ## Usage
 Just run it.
 
