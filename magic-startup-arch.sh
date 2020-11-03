@@ -171,7 +171,7 @@ if [ "$NO_ALIAS" = false ]; then
 		echo "[ERROR] HOME is not set. Can't add aliases!"
 	else
 		# if the user has PACMAN (he should) it will install useful aliases
-		if [[ "$HAS_PACMAN" -eq 1 ]]; then
+		if [[ "$HAS_PACMAN" -eq 0 ]]; then
 			echo $'alias inst=\'sudo pacman -S $1\'' >> $HOME/.bashrc
 			echo $'alias uninst=\'sudo pacman -R $1\'' >> $HOME/.bashrc
 			echo $'alias update=\'sudo pacman -Syu\'' >> $HOME/.bashrc
@@ -180,7 +180,7 @@ if [ "$NO_ALIAS" = false ]; then
 		fi
 
 		# if the user has YAY it will install useful aliases
-		if [[ "$HAS_YAY" -eq 1 ]]; then
+		if [[ "$HAS_YAY" -eq 0 ]]; then
 			echo $'alias aurupd=\'yay -Syu\'' >> $HOME/.bashrc
 			echo $'alias aurinst=\'yay -S $1\'' >> $HOME/.bashrc
 			echo $'alias aursearch=\'yay -Si $1\'' >> $HOME/.bashrc
@@ -200,7 +200,7 @@ if [ "$NO_PACMAN" = false ]; then
 	if [[ "$HAS_PACMAN" -eq 1 ]]; then
 		echo -e "You can't install 'pacman apps' without having pacman!\n"
 	else
-		for pacapp in ${pacapps[@]}; do
+		for pacapp in "${pacapps[@]}"; do
 			echo ""
 			echo "[INFO] Installing $pacapp ..."
 			"yes" | sudo pacman -S $pacapp >> /dev/null
@@ -220,7 +220,7 @@ if [ "$NO_AUR" = false ]; then
 	fi
 
 	# installing aur apps
-	for aurapp in ${aurapps[@]}; do
+	for aurapp in "${aurapps[@]}"; do
 		echo ""
 		echo "[INFO] Installing $aurapp ..."
 		yay -S --noconfirm $aurapp >> /dev/null
