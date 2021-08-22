@@ -10,34 +10,22 @@ you should have at least pacman installed on your system.
 
 It can install some packages from pacman and aur, and add my config file in your arch installation.
 
-The packages (for the unmodified script, the vanilla edition) are:
-| Pacman           | AUR            |
-| ---------------- | -------------- |
-| vlc              | obsidian       |
-| firefox          | zoom           |
-| telegram-desktop | android-studio |
-| code             | redshifgui-bin |
-| feh              |                |
-| tlp              |                |
-| thermald         |                |
-
-Optional packages:
-
-| Dotfiles Suggested Apps |
-| ----------------------- |
-| alacritty               |
-| curl                    |
-| df                      |
-| i3                      |
-| nano                    |
-| neofetch                |
-| picom                   |
-| polybar                 |
-| alsamixer               |
-| brightnessctl           |
-| maim                    |
-| nitrogen                |
-| xclip                   |
+The packages are:
+| Pacman           | AUR            | Dotfiles Suggested Apps |
+| ---------------- | -------------- | ----------------------- |
+| vlc              | obsidian       | alacritty               |
+| firefox          | zoom           | curl                    |
+| telegram-desktop | android-studio | df                      |
+| code             | redshifgui-bin | i3                      |
+| feh              |                | nano                    |
+| tlp              |                | neofetch                |
+| thermald         |                | picom                   |
+|                  |                | polybar                 |
+|                  |                | alsamixer               |
+|                  |                | brightnessctl           |
+|                  |                | maim                    |
+|                  |                | nitrogen                |
+|                  |                | xclip                   |
 
 
 
