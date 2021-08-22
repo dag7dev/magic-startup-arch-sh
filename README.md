@@ -8,17 +8,38 @@ you should have at least pacman installed on your system.
 
 > 🍒 Please install pacman!!! 🍒＼⍩⃝／
 
-It works in three modes:
-- pacman: it will install some programs using pacman.
-- aur: it will install some programs using yay as aur manager. If it is not present it will be installed using pacman.
-- alias: it will append to your .bashrc useful aliases which let you perform some easy operations using CLI.
+It can install some packages from pacman and aur, and add my config file in your arch installation.
 
 The packages (for the unmodified script, the vanilla edition) are:
-|Pacman apps|Aur apps|
-|-----------|--------|
-|vlc    |sublime     |
-|firefox|zoom        |
-|gimp   |intellij-idea-ultimate-edition|
+| Pacman           | AUR            |
+| ---------------- | -------------- |
+| vlc              | obsidian       |
+| firefox          | zoom           |
+| telegram-desktop | android-studio |
+| code             | redshifgui-bin |
+| feh              |                |
+| tlp              |                |
+| thermald         |                |
+
+Optional packages:
+
+| Dotfiles Suggested Apps |
+| ----------------------- |
+| alacritty               |
+| curl                    |
+| df                      |
+| i3                      |
+| nano                    |
+| neofetch                |
+| picom                   |
+| polybar                 |
+| alsamixer               |
+| brightnessctl           |
+| maim                    |
+| nitrogen                |
+| xclip                   |
+
+
 
 ## Usage
 Make the script executable and run it.
@@ -36,11 +57,11 @@ Remember: you will need sudo access to install app.
 ## Options:
 ```
 ./magic-startup-arch.sh -h
--h:		show this message
--no-pacman:	it won't install pacman packages
--no-aur:	it won't install packages with aur (including aur manager)
--no-alias:	it won't add aliases in your .bashrc
--full:		it will run the script performing all the operations without recap
+-h --help:		show this message
+--pacman: install pacman packages
+--aur:	install packages with aur (including aur manager)
+--dotfiles:	add my dotfiles
+--full:		run the script performing all the above operations
 ```
 
 ## How to add other programs that needs to be installed by pacman / yay?
