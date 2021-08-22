@@ -3,17 +3,18 @@
 # dag7 - 2020
 
 # This script will configure EndeavourOS (arch based) with custom settings
-# Tested on: EndeavourOS Linux x86_64 with bash 5.0.18 
+# Tested on: EndeavourOS Linux x86_64 with bash 5.0.18 - Manjaro Linux x86_64 with bash 5.1.8
 
 # Run it with sudo to avoid errors.
 ########################################
 
-pacapps=("vlc" "firefox" "telegram-desktop" "code" "feh" "tlp" "thermald")
-aurapps=("obsidian" "zoom" "android-studio" "redshiftgui-bin")
+pac_apps=("vlc" "firefox" "telegram-desktop" "code" "feh" "tlp" "thermald")
+aur_apps=("obsidian" "zoom" "android-studio" "redshiftgui-bin")
+dotfiles_apps=("alacritty" "curl" "df" "i3" "nano" "neofetch" "pacman" "picom" "polybar" "yay" "alsamixer" "brightnessctl" "maim" "nitrogen" "xclip")
 
 # DECLARING FUNCTIONS
-# return 1 if the OS doesn't have pacman, 0 if it does
-function hascmd {
+# return 1 if the OS doesn't have pacman 0 if it does
+function has_cmd {
 	result=`command -v $1`
 	if [ -z "$result" ]; then
 		return 1	# false
@@ -23,51 +24,47 @@ function hascmd {
 
 }
 
+function print_opt {
+	echo -ne "$1\t\t\t\t"
+	if [ "$2" = false ] ; then
+		echo "WON'T be installed"
+	else
+		echo "WILL be installed"
+	fi
+}
+
+function print_list {
+	
+	# @params: flag, name before list element, array 
+	if [ "$1" = true ] ; then
+		elts=("$@")
+		echo "$2:"
+
+		# unset first two parameters
+		unset 'elts[0]'
+		unset 'elts[1]'
+		unset 'elts[2]'
+
+		# installing aur apps
+		for element in ${elts[@]}; do
+			echo "[$3] $element"
+		done
+		echo ""
+	fi
+}
+
 function print_recap {
 	echo "RECAP: "
 
-	echo -ne "Pacman packages: \t"
-	if [ "$PACMAN" = false ] ; then
-		echo "WON'T be installed"
-	else
-		echo "WILL be installed"
-	fi
+	print_opt "PACM packages: " "$PACMAN"
+	print_opt "AUR packages: " "$AUR"
+	print_opt "Dotfiles: " "$DOTFILES"
 	
-	echo -ne "AUR packages: \t\t"
-	if [ "$AUR" = false ] ; then
-		echo "WON'T be installed"
-	else
-		echo "WILL be installed"
-	fi
-	
-	echo -ne "Dotfiles: \t\t"
-	if [ "$DOTFILES" = false ] ; then
-		echo "WON'T be downloaded"
-	else
-		echo "WILL be downloaded"
-	fi
-
-
 	echo ""
 	
 	# printing pacman packages which are goin' to be installed
-	if [ "$PACMAN" = true ] ; then
-		echo "Pacman packages:"
-		# installing aur apps
-		for pacapp in ${pacapps[@]}; do
-			echo "[PACMAN] $pacapp"
-		done
-		echo ""
-	fi
-	
-	# printing aur packages which are goin' to be installed	
-	if [ "$AUR" = true ] ; then
-		echo "Aur packages:"
-		for aurapp in ${aurapps[@]}; do
-			echo "[AUR] $aurapp"
-		done
-		echo ""
-	fi
+	print_list "$PACMAN" "Pacman packages" "PAC" "${pac_apps[@]}"
+	print_list "$AUR" "AUR Packages" "AUR" "${aur_apps[@]}"
 	
 	echo "[Press [ENTER] to continue]"
 	echo "[Press [CTRL+C] to quit]"
@@ -75,18 +72,18 @@ function print_recap {
 	read -p ""
 }
 
-function printfooter {
+function print_footer {
 	echo "Brought to you with <3 by dag7 - the enemy of ennui"
 }
 
-function showhelp {
+function show_help {
 	clear
 
 	echo -e "magic-startup-arch - by dag7 \n"
 
 	echo "Speed up your fresh-new-os-arch-based-pc with this script."
 
-	echo -e "More info: github.com/dag7dev/magic-startup-arch-sh \n"
+	echo -e "More info: https://github.com/dag7dev/magic-startup-arch-sh \n"
 
 	echo "Options:"
 	echo "-h --help:	show this message"
@@ -94,8 +91,18 @@ function showhelp {
 	echo "--aur:	install packages with aur (including aur manager)"
 	echo "--dotfiles:	add my dotfiles in your home folder."
 	echo "--full:		run the script performing all the operations "
-	echo -e "\t\twithout recap\n"
+}
 
+function pac_install {
+	if [[ "$HAS_PACMAN" -eq 1 ]]; then
+		echo -e "You can't install 'pacman apps' without having pacman!\n"
+	else
+		for pacapp in "$@"; do
+			echo ""
+			echo "[INFO] Installing $pacapp ..."
+			"yes" | sudo pacman -S $pacapp >> /dev/null
+		done
+	fi
 }
 
 ########################################
@@ -112,18 +119,19 @@ FULL=false
 AUR=false
 PACMAN=false
 DOTFILES=false
+SMARMELLA=false
 
-hascmd pacman
+has_cmd pacman
 HAS_PACMAN=$?
 
-hascmd yay
+has_cmd yay
 HAS_YAY=$?
 
-hascmd git
+has_cmd git
 HAS_GIT=$?
 
 if [[ "$#" -lt 1 ]]; then
-	showhelp
+	show_help
 	exit 0
 fi
 
@@ -131,11 +139,17 @@ fi
 for option in "$@"; do
 	case $option in
 	"--full")
-		FULL=true
+		PACMAN=true
+		AUR=true
+		DOTFILES=true
 	  ;;
 	
 	"--smarmella")
-		FULL=true
+		PACMAN=true
+		AUR=true
+		DOTFILES=true
+
+		SMARMELLA=true
 	  ;;
 
 	"--pacman")
@@ -151,23 +165,19 @@ for option in "$@"; do
 	  ;;
 
 	"-h")
-	  showhelp
+	  show_help
 	  exit 0
 	  ;;
 
 	"--help")
-	  showhelp
+	  show_help
 	  exit 0
 	  ;;
 	esac
 done
 
 # recap installation
-if [ "$FULL" = true ] ; then
-	PACMAN=true
-	AUR=true
-	DOTFILES=true
-
+if [ "$SMARMELLA" = true ] ; then
 	echo "Full activated! Skipping recap and everything else..."
 	echo ""
 
@@ -179,16 +189,7 @@ fi
 # PACMAN INSTALLER
 # ================
 if [ "$PACMAN" = true ]; then
-	# preliminary operation: checking if pacman is installed
-	if [[ "$HAS_PACMAN" -eq 1 ]]; then
-		echo -e "You can't install 'pacman apps' without having pacman!\n"
-	else
-		for pacapp in "${pacapps[@]}"; do
-			echo ""
-			echo "[INFO] Installing $pacapp ..."
-			"yes" | sudo pacman -S $pacapp >> /dev/null
-		done
-	fi
+	pac_install "${pac_apps[@]}"
 fi
 
 # AUR INSTALLER
@@ -201,7 +202,7 @@ if [ "$AUR" = true ]; then
 	fi
 
 	# installing aur apps
-	for aurapp in "${aurapps[@]}"; do
+	for aurapp in "${aur_apps[@]}"; do
 		echo ""
 		echo "[INFO] Installing $aurapp ..."
 		yay -S --noconfirm $aurapp >> /dev/null
@@ -216,8 +217,27 @@ if [ "$DOTFILES" = true ]; then
 	else
 		echo "WARNING! This may OVERWRITE your dotfiles config. A backup could be found in .configbackup and .bashrcbackup. Are you sure?"
 		read -p "[y/N]: " user_reply
-
+		
+		echo ""
+		
 		if [[ "$user_reply" == "Y" ]] || [[ "$user_reply" == "yes" ]] || [[ "$user_reply" == "y" ]]; then
+			echo "Do you want to install reccomended dotfiles' programs (in this way i3 keybindings will works)?"
+			print_list "$DOTFILES" "Dotfiles reccomended programs" "DOT" "${dotfiles_apps[@]}"
+			read -p "[y/N]: " user_reply
+
+			if [[ "$user_reply" == "Y" ]] || [[ "$user_reply" == "yes" ]] || [[ "$user_reply" == "y" ]]; then
+				pac_install $dotfiles_apps
+			fi
+
+			# if backup dir / file exist, then remove them
+			if [ -d "$HOME/.configbackup" ]; then
+				rm -rf "$HOME/.configbackup"
+			fi
+
+			if [ -f "$HOME/.bashrcbackup" ]; then
+				rm "$HOME/.bashrcbackup"
+			fi
+
 			# creates a backup
 			cp -a "$HOME/.config" "$HOME/.configbackup"
 			cp -a "$HOME/.bashrc" "$HOME/.bashrcbackup"
@@ -226,10 +246,9 @@ if [ "$DOTFILES" = true ]; then
 			rm -rf "$HOME/.config"
 			rm -rf "$HOME/.bashrc"
 			
-			# clon dotfiles
+			# clone dotfiles
 			git clone https://github.com/dag7dev/dotfiles.git "$HOME/tmp"
-			rm "$HOME/tmp/README.md"
-
+			
 			# copy all dotfiles folder and pastes it into your HOME dir
 			cp -a "$HOME/tmp/." "$HOME"
 			
@@ -240,16 +259,15 @@ if [ "$DOTFILES" = true ]; then
 			# remove un-needed folders
 			rm -rf "$HOME/tmp"
 			rm -rf "$HOME/.git"
+			rm -rf "$HOME/README.md"
 		fi
 
 		read -p "Press [ENTER] to continue"
 	fi
 fi
 
-clear
-
 echo ""
 echo "Script has been executed successfully! Have a nice day / night! :)"
 echo ""
 
-printfooter
+print_footer
