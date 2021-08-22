@@ -1,12 +1,18 @@
 #!/bin/bash
 
+# dag7 - 2020
+
 # This script will configure EndeavourOS (arch based) with custom settings
 # Tested on: EndeavourOS Linux x86_64 with bash 5.0.18 
 
+# Run it with sudo to avoid errors.
 ########################################
 
-# DECLARATING FUNCTIONS
-# return 1 if the operating system doesn't have pacman, 0 if it does
+pacapps=("vlc" "firefox" "telegram-desktop" "code" "feh" "tlp" "thermald")
+aurapps=("obsidian" "zoom" "android-studio" "redshiftgui-bin")
+
+# DECLARING FUNCTIONS
+# return 1 if the OS doesn't have pacman, 0 if it does
 function hascmd {
 	result=`command -v $1`
 	if [ -z "$result" ]; then
@@ -21,31 +27,31 @@ function print_recap {
 	echo "RECAP: "
 
 	echo -ne "Pacman packages: \t"
-	if [ "$NO_PACMAN" = false ] ; then
-		echo "WILL be installed"
-	else
+	if [ "$PACMAN" = false ] ; then
 		echo "WON'T be installed"
+	else
+		echo "WILL be installed"
 	fi
 	
 	echo -ne "AUR packages: \t\t"
-	if [ "$NO_AUR" = false ] ; then
-		echo "WILL be installed"
-	else
+	if [ "$AUR" = false ] ; then
 		echo "WON'T be installed"
-	fi
-	
-	
-	echo -ne "Alias: \t\t\t"
-	if [ "$NO_ALIAS" = false ] ; then
-		echo "WILL be added"
 	else
-		echo "WON'T be added"
+		echo "WILL be installed"
 	fi
 	
+	echo -ne "Dotfiles: \t\t"
+	if [ "$DOTFILES" = false ] ; then
+		echo "WON'T be downloaded"
+	else
+		echo "WILL be downloaded"
+	fi
+
+
 	echo ""
 	
 	# printing pacman packages which are goin' to be installed
-	if [ "$NO_PACMAN" = false ] ; then
+	if [ "$PACMAN" = true ] ; then
 		echo "Pacman packages:"
 		# installing aur apps
 		for pacapp in ${pacapps[@]}; do
@@ -55,7 +61,7 @@ function print_recap {
 	fi
 	
 	# printing aur packages which are goin' to be installed	
-	if [ "$NO_AUR" = false ] ; then
+	if [ "$AUR" = true ] ; then
 		echo "Aur packages:"
 		for aurapp in ${aurapps[@]}; do
 			echo "[AUR] $aurapp"
@@ -65,13 +71,12 @@ function print_recap {
 	
 	echo "[Press [ENTER] to continue]"
 	echo "[Press [CTRL+C] to quit]"
-	echo ""
 
 	read -p ""
 }
 
 function printfooter {
-	echo "Brought to you with <3 by dag7 - the nemesis of ennui"
+	echo "Brought to you with <3 by dag7 - the enemy of ennui"
 }
 
 function showhelp {
@@ -84,11 +89,11 @@ function showhelp {
 	echo -e "More info: github.com/dag7dev/magic-startup-arch-sh \n"
 
 	echo "Options:"
-	echo "-h:		show this message"
-	echo "-no-pacman:	it won't install pacman packages"
-	echo "-no-aur:	it won't install packages with aur (including aur manager)"
-	echo "-no-alias:	it won't add aliases in your .bashrc"
-	echo "-full:		it will run the script performing all the operations "
+	echo "-h --help:	show this message"
+	echo "--pacman:	install pacman packages"
+	echo "--aur:	install packages with aur (including aur manager)"
+	echo "--dotfiles:	add my dotfiles in your home folder."
+	echo "--full:		run the script performing all the operations "
 	echo -e "\t\twithout recap\n"
 
 }
@@ -104,9 +109,9 @@ echo ""
 
 # setting variables
 FULL=false
-NO_AUR=false
-NO_ALIAS=false
-NO_PACMAN=false
+AUR=false
+PACMAN=false
+DOTFILES=false
 
 hascmd pacman
 HAS_PACMAN=$?
@@ -114,33 +119,43 @@ HAS_PACMAN=$?
 hascmd yay
 HAS_YAY=$?
 
-pacapps=("vlc" "firefox" "gimp")
-aurapps=("sublime" "zoom" "intellij-idea-ultimate-edition")
+hascmd git
+HAS_GIT=$?
+
+if [[ "$#" -lt 1 ]]; then
+	showhelp
+	exit 0
+fi
 
 # Managing parameters
 for option in "$@"; do
 	case $option in
-	"-full")
+	"--full")
 		FULL=true
 	  ;;
 	
-	"-smarmella")
+	"--smarmella")
 		FULL=true
 	  ;;
 
-	"-no-pacman")
-	  NO_PACMAN=true
+	"--pacman")
+	  PACMAN=true
 	  ;;
 	
-	"-no-aur")
-	  NO_AUR=true
+	"--aur")
+	  AUR=true
 	  ;;
 	
-	"-no-alias")
-	  NO_ALIAS=true
+	"--dotfiles")
+	  DOTFILES=true
 	  ;;
 
 	"-h")
+	  showhelp
+	  exit 0
+	  ;;
+
+	"--help")
 	  showhelp
 	  exit 0
 	  ;;
@@ -149,10 +164,9 @@ done
 
 # recap installation
 if [ "$FULL" = true ] ; then
-	NO_PACMAN=false
-	NO_AUR=false
-	NO_ALIAS=false
-	NO_PACMAN=false
+	PACMAN=true
+	AUR=true
+	DOTFILES=true
 
 	echo "Full activated! Skipping recap and everything else..."
 	echo ""
@@ -162,40 +176,9 @@ else
 fi
 
 
-# Setting aliases
-# ===============
-if [ "$NO_ALIAS" = false ]; then
-	#echo "alias update-grub='grub-mkconfig -o /boot/grub/grub.cfg'" 	# this could cause problems if update-grub is already present
-	
-	if [ -z "$HOME" ]; then
-		echo "[ERROR] HOME is not set. Can't add aliases!"
-	else
-		# if the user has PACMAN (he should) it will install useful aliases
-		if [[ "$HAS_PACMAN" -eq 0 ]]; then
-			echo $'alias inst=\'sudo pacman -S $1\'' >> $HOME/.bashrc
-			echo $'alias uninst=\'sudo pacman -R $1\'' >> $HOME/.bashrc
-			echo $'alias update=\'sudo pacman -Syu\'' >> $HOME/.bashrc
-			
-			echo $'alias instpkg=\'sudo pacman -U $1\'' >> $HOME/.bashrc
-		fi
-
-		# if the user has YAY it will install useful aliases
-		if [[ "$HAS_YAY" -eq 0 ]]; then
-			echo $'alias aurupd=\'yay -Syu\'' >> $HOME/.bashrc
-			echo $'alias aurinst=\'yay -S $1\'' >> $HOME/.bashrc
-			echo $'alias aursearch=\'yay -Si $1\'' >> $HOME/.bashrc
-			echo $'alias aurremove=\'yay -Rns $1\'' >> $HOME/.bashrc
-		fi
-		# Reload current bashrc to allow usage of aliases
-		. ~/.bashrc
-	fi
-fi
-
-
-
 # PACMAN INSTALLER
 # ================
-if [ "$NO_PACMAN" = false ]; then
+if [ "$PACMAN" = true ]; then
 	# preliminary operation: checking if pacman is installed
 	if [[ "$HAS_PACMAN" -eq 1 ]]; then
 		echo -e "You can't install 'pacman apps' without having pacman!\n"
@@ -208,11 +191,9 @@ if [ "$NO_PACMAN" = false ]; then
 	fi
 fi
 
-
-
 # AUR INSTALLER
 # =============
-if [ "$NO_AUR" = false ]; then
+if [ "$AUR" = true ]; then
 	# preliminary operation: checking if yay is installed
 	if [[ "$HAS_YAY" -eq 1 ]]; then
 		echo "[WARNING] Error! Yay is not present! Installing yay..."
@@ -226,6 +207,46 @@ if [ "$NO_AUR" = false ]; then
 		yay -S --noconfirm $aurapp >> /dev/null
 	done
 fi
+
+# DOTFILES INSTALLER
+# ================
+if [ "$DOTFILES" = true ]; then
+	if [[ "$HAS_GIT" -eq 1 ]]; then
+		echo -e "You can't have my dotfiles without having git!\n"
+	else
+		echo "WARNING! This may OVERWRITE your dotfiles config. A backup could be found in .configbackup and .bashrcbackup. Are you sure?"
+		read -p "[y/N]: " user_reply
+
+		if [[ "$user_reply" == "Y" ]] || [[ "$user_reply" == "yes" ]] || [[ "$user_reply" == "y" ]]; then
+			# creates a backup
+			cp -a "$HOME/.config" "$HOME/.configbackup"
+			cp -a "$HOME/.bashrc" "$HOME/.bashrcbackup"
+
+			# remove actual files			
+			rm -rf "$HOME/.config"
+			rm -rf "$HOME/.bashrc"
+			
+			# clon dotfiles
+			git clone https://github.com/dag7dev/dotfiles.git "$HOME/tmp"
+			rm "$HOME/tmp/README.md"
+
+			# copy all dotfiles folder and pastes it into your HOME dir
+			cp -a "$HOME/tmp/." "$HOME"
+			
+			# enable nano syntax highlight
+			rm "$HOME/.nanorc"
+			cp -a "$HOME/.nano/.nanorc" "$HOME"
+			
+			# remove un-needed folders
+			rm -rf "$HOME/tmp"
+			rm -rf "$HOME/.git"
+		fi
+
+		read -p "Press [ENTER] to continue"
+	fi
+fi
+
+clear
 
 echo ""
 echo "Script has been executed successfully! Have a nice day / night! :)"
