@@ -119,7 +119,6 @@ FULL=false
 AUR=false
 PACMAN=false
 DOTFILES=false
-SMARMELLA=false
 
 has_cmd pacman
 HAS_PACMAN=$?
@@ -144,14 +143,6 @@ for option in "$@"; do
 		DOTFILES=true
 	  ;;
 	
-	"--smarmella")
-		PACMAN=true
-		AUR=true
-		DOTFILES=true
-
-		SMARMELLA=true
-	  ;;
-
 	"--pacman")
 	  PACMAN=true
 	  ;;
@@ -175,16 +166,6 @@ for option in "$@"; do
 	  ;;
 	esac
 done
-
-# recap installation
-if [ "$SMARMELLA" = true ] ; then
-	echo "Full activated! Skipping recap and everything else..."
-	echo ""
-
-else
-	print_recap
-fi
-
 
 # PACMAN INSTALLER
 # ================
