@@ -1,85 +1,81 @@
 # magic-startup-arch-sh
 ## What it does
-This program allows you to speed up the installation process
-of your pc in case of a fresh installation of the operating system.
+This script allows to speed up the installation process
+of your computer in case of a fresh installation of an operating system based on arch.
 
-Since this script has been developed using an arch-based distro
-you should have at least pacman installed on your system.
+This script has been developed using an arch-based distro, therefore you should have at least pacman installed on your system.
 
-> 🍒 Please install pacman!!! 🍒＼⍩⃝／
+> Please install pacman!!!  ᗧ···🍒···ᗣ 
 
-It can install some packages from pacman and aur, and add my config file in your arch installation.
+Features:
+- install packages from pacman
+- install packages from aur
+- install aur manager (yay)
+- install suggested packages (default list coming from my dotfiles config files)
+- use my personal dotfiles files
 
-The packages are:
-| Pacman           | AUR            | Dotfiles Suggested Apps |
-| ---------------- | -------------- | ----------------------- |
-| vlc              | obsidian       | alacritty               |
-| firefox          | zoom           | curl                    |
-| telegram-desktop | android-studio | df                      |
-| code             | redshifgui-bin | i3                      |
-| feh              |                | nano                    |
-| tlp              |                | neofetch                |
-| thermald         |                | picom                   |
-|                  |                | polybar                 |
-|                  |                | alsamixer               |
-|                  |                | brightnessctl           |
-|                  |                | maim                    |
-|                  |                | nitrogen                |
-|                  |                | xclip                   |
+## Info on packages
+| Pacman           | AUR             | Suggested Apps (dotfiles) |
+| ---------------- | --------------- | ------------------------- |
+| vlc              | obsidian        | alacritty                 |
+| firefox          | zoom            | curl                      |
+| telegram-desktop | android-studio  | df                        |
+| code             | redshiftgui-bin | i3                        |
+| feh              |                 | nano                      |
+| tlp              |                 | neofetch                  |
+| thermald         |                 | picom                     |
+| qpdfview         |                 | polybar                   |
+|                  |                 | alsamixer                 |
+|                  |                 | brightnessctl             |
+|                  |                 | maim                      |
+|                  |                 | nitrogen                  |
+|                  |                 | xclip                     |
 
 
 
 ## Usage
 Make the script executable and run it.
-
 ```
 chmod 755 magic-startup-arch.sh
 ./magic-startup-arch.sh
 ```
-There will be a recap on what are you doing to do.
+There will be a recap on what are you doing to install, **[make sure to have read the previous section](#what-it-does)!**
 
-Make sure to have read the previous paragraph!
-
-Remember: you will need sudo access to install app.
+Remember: **you will need sudo access** to install everything.
 
 ## Options:
 ```
 ./magic-startup-arch.sh -h
 -h --help:		show this message
---pacman: install pacman packages
---aur:	install packages with aur (including aur manager)
---dotfiles:	add my dotfiles
---full:		run the script performing all the above operations
+--pacman:     install pacman packages
+--aur:	      install packages with aur (including aur manager if not present)
+--dotfiles:	  add my dotfiles (optionally: install reccomended packages)
+--full:		    run the script performing all the above operations
 ```
 
-## How to add other programs that needs to be installed by pacman / yay?
-You can customize each list by adding or removing entries in the script in the variables 'pacapps' and 'aurapps'.
+## FAQ
+Q: How to add other programs that needs to be installed by pacman / yay?
+- You can customize each list by adding or removing entries in the script in the variables 'pacapps' and 'aurapps'.
 
-Each program is separated by a space: **DON'T** use any other separator.
+Q: Can I use other separators than space character as you've done?
+- No, each program is separated by a space: **DON'T** use any other separator.
 
-**NOTE:** you will need to know and write exactly the name of the package as you would do it by typing by hand on CLI.
+Q: I wrote 'neofotch' but it doesn't install neofetch. What should I do? 
+- You will need to know the exact name of the package.
 
+**For instance**: if you want to install IntelliJ by using aur, you can't simply add "IntelliJ" to aurapps.
 
-***For instance***: if you want to install IntelliJ by using aur, you can't simply add "IntelliJ" to aurapps.
+First, search what is the name of a proper IntelliJ package on aur; once you've figured out (it is "intellij-idea-ultimate-edition"), place this name enclosed with double quotes in the array of `aurapps` in the script.
 
-First search what is the name of a proper IntelliJ package on aur, once you have figured out what it is (in our case is "intellij-idea-ultimate-edition"), place this name enclosed with double quotes in the array of aurapps in the script.
-
-```
-aurapps=("sublime" "zoom")
-```
-will become
+In the end, you should have something like this:
 ```
 aurapps=("sublime" "zoom" "intellij-idea-ultimate-edition")
 ```
+Q: Where did you tested this script?
+- EndeavourOS Linux x86_64 with bash 5.0.18, it should works great on Manjaro and arch too.
+
 
 ## Problems?
-Just open an issue here: https://github.com/dag7dev/magic-startup-arch-sh/issues
-or send me a mail.
+Just open an issue here: https://github.com/dag7dev/magic-startup-arch-sh/issues or send me a mail: it is free, and I will look at it for sure!
 
-It is free, it doesn't take you time, moreover, I will look at it for sure!
-
-What else?☕ 
-
-## Where did you tested this script?
-Tested on: EndeavourOS Linux x86_64 with bash 5.0.18 
 
