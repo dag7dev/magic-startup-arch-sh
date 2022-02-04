@@ -8,7 +8,7 @@
 # Run it with sudo to avoid errors.
 ########################################
 
-pac_apps=("vlc" "firefox" "telegram-desktop" "code" "feh" "tlp" "thermald")
+pac_apps=("vlc" "firefox" "telegram-desktop" "code" "feh" "tlp" "thermald" "qpdfview")
 aur_apps=("obsidian" "zoom" "android-studio" "redshiftgui-bin")
 dotfiles_apps=("alacritty" "curl" "df" "i3" "nano" "neofetch" "pacman" "picom" "polybar" "yay" "alsamixer" "brightnessctl" "maim" "nitrogen" "xclip")
 
