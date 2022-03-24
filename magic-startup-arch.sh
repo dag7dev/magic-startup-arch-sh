@@ -8,9 +8,9 @@
 # Run it with sudo to avoid errors.
 ########################################
 
-pac_apps=("vlc" "firefox" "telegram-desktop" "code" "feh" "tlp" "thermald" "qpdfview")
-aur_apps=("obsidian" "zoom" "android-studio" "redshiftgui-bin")
-dotfiles_apps=("alacritty" "curl" "df" "i3" "nano" "neofetch" "pacman" "picom" "polybar" "yay" "alsamixer" "brightnessctl" "maim" "nitrogen" "xclip")
+pac_apps=("vlc" "firefox" "telegram-desktop" "code" "feh" "tlp" "thermald" "qpdfview" "python-pip" "thefuck" "nitrogen" "neofetch" "curl" "bitwarden-cli" "brave-browser")
+aur_apps=("obsidian" "zoom" "android-studio" "redshiftgui-bin" "otpclient")
+dotfiles_apps=("alacritty" "df" "i3" "nano" "pacman" "picom" "polybar" "yay" "alsamixer" "brightnessctl" "maim" "xclip")
 
 # DECLARING FUNCTIONS
 # return 1 if the OS doesn't have pacman 0 if it does
