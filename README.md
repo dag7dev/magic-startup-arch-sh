@@ -14,23 +14,24 @@ Features:
 - install suggested packages (default list coming from my dotfiles config files)
 - use my personal dotfiles files
 
+
 ## Info on packages
 | Pacman           | AUR             | Suggested Apps (dotfiles) |
 | ---------------- | --------------- | ------------------------- |
 | vlc              | obsidian        | alacritty                 |
-| firefox          | zoom            | curl                      |
-| telegram-desktop | android-studio  | df                        |
-| code             | redshiftgui-bin | i3                        |
-| feh              |                 | nano                      |
-| tlp              |                 | neofetch                  |
-| thermald         |                 | picom                     |
-| qpdfview         |                 | polybar                   |
-|                  |                 | alsamixer                 |
-|                  |                 | brightnessctl             |
-|                  |                 | maim                      |
-|                  |                 | nitrogen                  |
-|                  |                 | xclip                     |
-
+| firefox          | zoom            | df                      |
+| telegram-desktop | android-studio  | i3                        |
+| code             | redshiftgui-bin | nano                        |
+| feh              | otpclient| picom               |
+| tlp              |                 |polybar|
+| thermald         |                 |alsamixer|
+| qpdfview         |                 |brightnessctl|
+| python-pip                 |                 |maim|
+| nitrogen                 |                 |xclip|
+| neofetch                 |                 ||
+| curl                 |                 ||
+| bitwarden-cli                 |                 |                      |
+| brave-browser | | |
 
 
 ## Usage
