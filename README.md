@@ -23,7 +23,7 @@ Features:
 | telegram-desktop | android-studio  | i3                        |
 | code             | redshiftgui-bin | nano                        |
 | feh              | otpclient| picom               |
-| tlp              |                 |polybar|
+| tlp              |veracrypt|polybar|
 | thermald         |                 |alsamixer|
 | qpdfview         |                 |brightnessctl|
 | python-pip                 |                 |maim|
