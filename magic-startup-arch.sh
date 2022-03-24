@@ -9,7 +9,7 @@
 ########################################
 
 pac_apps=("vlc" "firefox" "telegram-desktop" "code" "feh" "tlp" "thermald" "qpdfview" "python-pip" "thefuck" "nitrogen" "neofetch" "curl" "bitwarden-cli" "brave-browser")
-aur_apps=("obsidian" "zoom" "android-studio" "redshiftgui-bin" "otpclient")
+aur_apps=("obsidian" "zoom" "android-studio" "redshiftgui-bin" "otpclient" "veracrypt")
 dotfiles_apps=("alacritty" "df" "i3" "nano" "pacman" "picom" "polybar" "yay" "alsamixer" "brightnessctl" "maim" "xclip")
 
 # DECLARING FUNCTIONS
