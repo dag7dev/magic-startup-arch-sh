@@ -40,7 +40,7 @@ Make the script executable and run it.
 chmod 755 magic-startup-arch.sh
 ./magic-startup-arch.sh
 ```
-There will be a recap on what are you doing to install, **[make sure to have read the previous section](#what-it-does)!**
+There will be a recap on what are you going to install, **[make sure to have read the previous section](#what-it-does)!**
 
 Remember: **you will need sudo access** to install everything.
 
